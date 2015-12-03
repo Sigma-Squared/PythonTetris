@@ -17,9 +17,11 @@ def main():
     pygame.display.set_caption('Tetris')
 
     pygame.time.set_timer(TetrisGame.TICKEVENT, TICK_TIME)
+    clock = pygame.time.Clock()
 
     while running:
         try:
+            clock.tick(60)
             game.draw(screen)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -29,7 +31,7 @@ def main():
                 if event.type == TetrisGame.GAMEOVEREVENT:
                     game.game_over()
                 elif event.type == TetrisGame.TICKEVENT:
-                        game.tick()
+                    game.tick()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
                         game.get_active_piece().move_right()
