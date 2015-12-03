@@ -18,25 +18,34 @@ class TetrisGame(object):
         self.width = width
         self.height = height
         self.board = [[0] * width for _ in range(height)]
-        self.active_piece = Piece(4, 0, random.randint(1, 7), self.BLOCK_SIZE, self)
+        self.active_piece = None
         self.sc_font = pygame.font.SysFont("Roboto,Arial", 14)
         self.go_font = None
         self.go_text = None
 
+    def new_piece(self):
+        return Piece(4, 0, random.randint(1, 7), self.BLOCK_SIZE, self)
+
     def begin(self):
-        pygame.time.set_timer(TetrisGame.TICKEVENT, TetrisGame.TICK_TIME)
+        self.active_piece = self.new_piece()
+        self.set_tick_time(TetrisGame.TICK_TIME)
+
+    def set_tick_time(self, tick):
+        pygame.time.set_timer(TetrisGame.TICKEVENT, tick)
 
     def restart(self):
         self.__score = 0
+        self.gameover = False
         for i in range(self.height):
             for j in range(self.width):
                 self.board[i][j] = 0
-        self.active_piece = Piece(4, 0, random.randint(1, 7), self.BLOCK_SIZE, self)
-        pygame.time.set_timer(TetrisGame.TICKEVENT, TetrisGame.TICK_TIME)
-        self.gameover = False
+        self.begin()
 
     def add_score(self, val):
         self.__score += val
+
+    def is_game_over(self):
+        return self.gameover
 
     def draw(self, screen):
         screen.fill(TetrisGame.colors[0])
@@ -67,7 +76,7 @@ class TetrisGame(object):
     def move_active_down(self):
         if not self.active_piece.move_down():
             self.active_piece.attach()
-            self.active_piece = Piece(4, 0, random.randint(1, 7), self.BLOCK_SIZE, self)
+            self.active_piece = self.new_piece()
 
     def clear_rows(self):
         count = 0

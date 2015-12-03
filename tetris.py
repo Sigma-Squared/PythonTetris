@@ -37,14 +37,14 @@ def main():
                         game.get_active_piece().move_left()
                     elif event.key == pygame.K_DOWN:
                         game.move_active_down()
-                        pygame.time.set_timer(TetrisGame.TICKEVENT, TetrisGame.TICK_TIME_FAST)
+                        game.set_tick_time(TetrisGame.TICK_TIME_FAST)
                     elif event.key == pygame.K_UP:
                         game.get_active_piece().rotate()
                 elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_DOWN:
-                        pygame.time.set_timer(TetrisGame.TICKEVENT, TetrisGame.TICK_TIME)
+                        game.set_tick_time(TetrisGame.TICK_TIME)
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if game.gameover:
+                    if game.is_game_over():
                         game.restart()
             pygame.display.flip()
         except Exception:
