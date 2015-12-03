@@ -6,6 +6,8 @@ import random
 class TetrisGame(object):
     TICKEVENT = pygame.USEREVENT
     GAMEOVEREVENT = pygame.USEREVENT+1
+    TICK_TIME = 800
+    TICK_TIME_FAST = 50
     colors = [0xDBDBDB, 0x1D80A1, 0x57298F, 0xBA78C2, 0xBD1717, 0x35A63E, 0xBCC416, 0x16C49C]
     scores = [10, 40, 100, 300, 1200]
 
@@ -15,11 +17,23 @@ class TetrisGame(object):
         self.BLOCK_SIZE = block_size
         self.width = width
         self.height = height
-        self.board = [[0] * 10 for _ in range(20)]
+        self.board = [[0] * width for _ in range(height)]
         self.active_piece = Piece(4, 0, random.randint(1, 7), self.BLOCK_SIZE, self)
         self.sc_font = pygame.font.SysFont("Roboto,Arial", 14)
         self.go_font = None
         self.go_text = None
+
+    def begin(self):
+        pygame.time.set_timer(TetrisGame.TICKEVENT, TetrisGame.TICK_TIME)
+
+    def restart(self):
+        self.__score = 0
+        for i in range(self.height):
+            for j in range(self.width):
+                self.board[i][j] = 0
+        self.active_piece = Piece(4, 0, random.randint(1, 7), self.BLOCK_SIZE, self)
+        pygame.time.set_timer(TetrisGame.TICKEVENT, TetrisGame.TICK_TIME)
+        self.gameover = False
 
     def add_score(self, val):
         self.__score += val

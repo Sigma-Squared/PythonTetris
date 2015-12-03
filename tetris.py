@@ -9,14 +9,12 @@ def main():
     width = 10
     height = 20
     BLOCK_SIZE = 32
-    TICK_TIME = 800
-    TICK_TIME_FAST = 50
 
     screen = pygame.display.set_mode((width * BLOCK_SIZE, height * BLOCK_SIZE))
     pygame.display.set_caption('Tetris')
     game = TetrisGame(width, height, BLOCK_SIZE)
+    game.begin()
 
-    pygame.time.set_timer(TetrisGame.TICKEVENT, TICK_TIME)
     clock = pygame.time.Clock()
 
     while running:
@@ -39,12 +37,15 @@ def main():
                         game.get_active_piece().move_left()
                     elif event.key == pygame.K_DOWN:
                         game.move_active_down()
-                        pygame.time.set_timer(TetrisGame.TICKEVENT, TICK_TIME_FAST)
+                        pygame.time.set_timer(TetrisGame.TICKEVENT, TetrisGame.TICK_TIME_FAST)
                     elif event.key == pygame.K_UP:
                         game.get_active_piece().rotate()
                 elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_DOWN:
-                        pygame.time.set_timer(TetrisGame.TICKEVENT, TICK_TIME)
+                        pygame.time.set_timer(TetrisGame.TICKEVENT, TetrisGame.TICK_TIME)
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if game.gameover:
+                        game.restart()
             pygame.display.flip()
         except Exception:
             running = False
