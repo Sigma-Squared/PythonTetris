@@ -5,6 +5,7 @@ Tetris with Python &amp; Pygame
 
 ## To run (requires [PyGame](http://www.pygame.org/hifi.html))
 run tetris.py in python2
+
 Unix-like:
 ```
 python tetris.py
