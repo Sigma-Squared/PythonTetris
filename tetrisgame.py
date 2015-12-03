@@ -6,7 +6,7 @@ import random
 class TetrisGame(object):
     TICKEVENT = pygame.USEREVENT
     GAMEOVEREVENT = pygame.USEREVENT+1
-    color_dict = [0xDBDBDB, 0x1D80A1, 0x57298F, 0xC437AF, 0xBD1717, 0x35A63E, 0xBCC416, 0x16C49C]
+    colors = [0xDBDBDB, 0x1D80A1, 0x57298F, 0xC437AF, 0xBD1717, 0x35A63E, 0xBCC416, 0x16C49C]
 
     def __init__(self, block_size):
         self.gameover = False
@@ -19,14 +19,14 @@ class TetrisGame(object):
         self.go_font = None
 
     def draw(self, screen):
-        screen.fill(TetrisGame.color_dict[0])
+        screen.fill(TetrisGame.colors[0])
         if (self.active_piece):
             self.active_piece.draw_shadow(screen)
             self.active_piece.draw(screen)
         for i in range(self.height):
             for j in range(self.width):
                 if (self.board[i][j]):
-                    col = TetrisGame.color_dict[ self.board[i][j] ]
+                    col = TetrisGame.colors[ self.board[i][j]]
                     screen.fill(col, (j*self.BLOCK_SIZE, i*self.BLOCK_SIZE, self.BLOCK_SIZE, self.BLOCK_SIZE ) )
         if self.gameover and self.go_text:
             pygame.gfxdraw.box(screen, (0, 0, self.BLOCK_SIZE*self.width, self.BLOCK_SIZE*self.height), (0, 0, 0, 128))
@@ -58,6 +58,7 @@ class TetrisGame(object):
         self.go_font = pygame.font.SysFont("Roboto,Arial", 52, bold=True)
         self.go_text = self.go_font.render("Game Over!", True, (255, 255, 255))
         pygame.time.set_timer(TetrisGame.TICKEVENT, 0)
+
 
 class Piece(object):
     def __init__(self, x, y, _type, block_size, game_obj):
@@ -105,10 +106,7 @@ class Piece(object):
 
     def move_down(self):
         self.y += 1
-        if ((self.y+self.height)>20):
-            self.y -= 1
-            return False
-        if self.collision():
+        if ((self.y+self.height)>20) or self.collision():
             self.y -= 1
             return False
         return True
@@ -156,5 +154,5 @@ class Piece(object):
             for j in range(self.width):
                 if self.m[i][j]:
                     _rect = (self.BLOCK_SIZE*(self.x+j), self.BLOCK_SIZE*(self.y+i), self.BLOCK_SIZE+1, self.BLOCK_SIZE+1)
-                    screen.fill(TetrisGame.color_dict[self.type], _rect)
+                    screen.fill(TetrisGame.colors[self.type], _rect)
                     pygame.gfxdraw.rectangle(screen, _rect, (0, 0, 0, 50))
